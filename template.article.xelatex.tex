@@ -1,0 +1,507 @@
+\documentclass[$if(fontsize)$$fontsize$,$endif$$if(lang)$$lang$,$endif$$if(papersize)$$papersize$,$endif$$for(classoption)$$classoption$$sep$,$endfor$]{$documentclass$}
+\usepackage{color}
+\usepackage[table]{xcolor}
+\usepackage{lmodern}
+\usepackage{wallpaper}
+\usepackage{amssymb,amsmath}
+\usepackage[stable]{footmisc}
+\definecolor{ocre}{RGB}{243,102,25}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+$if(euro)$
+  \usepackage{eurosym}
+$endif$
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+    \usepackage{xltxtra,xunicode}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+$if(mainfont)$
+    \setmainfont{$mainfont$}
+$endif$
+$if(sansfont)$
+    \setsansfont{$sansfont$}
+$endif$
+$if(monofont)$
+    \setmonofont[Mapping=tex-ansi]{$monofont$}
+$endif$
+$if(mathfont)$
+    \setmathfont(Digits,Latin,Greek){$mathfont$}
+$endif$
+\fi
+% use microtype if available
+\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+$if(geometry)$
+\usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
+$endif$
+$if(natbib)$
+\usepackage{natbib}
+\bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
+$endif$
+$if(biblatex)$
+\usepackage{biblatex}
+$if(biblio-files)$
+\bibliography{$biblio-files$}
+$endif$
+$endif$
+$if(listings)$
+\usepackage{listings}
+$endif$
+$if(lhs)$
+\lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily}}{}
+$endif$
+
+\usepackage{environ}
+$if(highlighting-macros)$
+$highlighting-macros$
+$else$
+\usepackage{fancyvrb}
+$endif$
+
+\renewcommand{\theFancyVerbLine}{\textcolor{borderCodeColor}{\small\arabic{FancyVerbLine}}}
+\RecustomVerbatimEnvironment{Verbatim}{Verbatim}{frame=single, rulecolor=\color{borderCodeColor}, numbers=left, numbersep=2pt, fontsize=\small, samepage=true}
+$if(highlighting-macros)$
+\RecustomVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}, frame=single, rulecolor=\color{borderCodeColor}, numbers=left, numbersep=2pt, fontsize=\small, samepage=true}
+$else$
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}, frame=single, rulecolor=\color{borderCodeColor}, numbers=left, numbersep=2pt, fontsize=\small, samepage=true}
+$endif$
+
+\usepackage{listings}
+
+%\usepackage{soul}
+
+
+\definecolor{borderCodeColor}{HTML}{9B9B9B}
+\definecolor{backgrounfCodeColor}{HTML}{EEEEEE}
+\definecolor{textCodeColor}{HTML}{AA0000}
+
+%\sethlcolor{backgrounfCodeColor}
+\let\OldTexttt\texttt
+
+
+%\renewcommand{\texttt}[1]{\textcolor{red}{\OldTexttt{#1}}}
+%\renewcommand{\texttt}[1]{\textcolor{\OldTexttt{\hl{borderCodeColor}{#1}}}}
+\renewcommand{\texttt}[1]{\OldTexttt{\fcolorbox{borderCodeColor}{backgrounfCodeColor}{\textcolor{textCodeColor}{#1}}}}
+%\renewcommand{\texttt}[1]{\fcolorbox{borderCodeColor}{Light}{\textcolor{red}{\Verb{#1}}}}
+%\renewcommand{\texttt}[1]{\Verb{\fcolorbox{borderCodeColor}{Light}{\textcolor{red}{#1}}}}
+
+
+
+$if(verbatim-in-note)$
+\usepackage{fancyvrb}
+$endif$
+$if(tables)$
+%\usepackage{longtable,booktabs}
+$endif$
+$if(graphics)$
+\usepackage{graphicx}
+% Redefine \includegraphics so that, unless explicit options are
+% given, the image width will not exceed the width of the page.
+% Images get their normal width if they fit onto the page, but
+% are scaled down if they would overflow the margins.
+\makeatletter
+\def\ScaleIfNeeded{%
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+\let\Oldincludegraphics\includegraphics
+{%
+ \catcode`\@=11\relax%
+ \gdef\includegraphics{\@ifnextchar[{\Oldincludegraphics}{\Oldincludegraphics[width=\ScaleIfNeeded]}}%
+}%
+\usepackage{scalerel}
+%\newcommand{\inlineimage}[1]{\scalerel*{}{\scaleobj{2}{\scalerel*{\Oldincludegraphics{#1}}{M}}}}
+\newcommand{\inlineimage}[1]{\raisebox{-.2\height}{\scalerel*{\Oldincludegraphics{#1}}{\scaleobj{2}{M}}}}
+$endif$
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\definecolor{linkColor}{HTML}{1070CF}
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={$author-meta$},
+            pdftitle={$title-meta$},
+            colorlinks=true,
+            hyperfootnotes=true,
+            citecolor=$if(citecolor)$$citecolor$$else$linkColor$endif$,
+            urlcolor=$if(urlcolor)$$urlcolor$$else$linkColor$endif$,
+            linkcolor=$if(linkcolor)$$linkcolor$$else$magenta$endif$,
+            pdfborder={0 0 0}}
+
+\urlstyle{same}  % don't use monospace font for urls
+\let\urlOld\url
+\renewcommand{\url}[1]{\textcolor{linkColor}{\underline{\urlOld{#1}}}}
+\let\hrefOld\href
+\newcommand{\links}[2]{\textcolor{linkColor}{\underline{\hrefOld{#1}{#2}}}}
+
+
+$if(links-as-notes)$
+% Make links footnotes instead of hotlinks:
+%\let\linksOldBis\links
+%\renewcommand{\href}[2]{#2\footnote{\url{#1}}}
+
+\newcommand{\refmarken}[1]{~[Lien-#1]}
+\usepackage{enotez}
+\setenotez{
+    list-name=Liens,
+    mark-cs=\refmarken,
+    backref=true
+}
+\renewcommand{\links}[2]{#2\endnote{\urlOld{#1}}}
+$endif$
+
+$if(strikeout)$
+\usepackage[normalem]{ulem}
+% avoid problems with \sout in headers with hyperref:
+\pdfstringdefDisableCommands{\renewcommand{\sout}{}}
+$endif$
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+$if(numbersections)$
+\setcounter{secnumdepth}{5}
+$else$
+\setcounter{secnumdepth}{0}
+$endif$
+$if(verbatim-in-note)$
+\VerbatimFootnotes % allows verbatim text in footnotes
+$endif$
+$if(lang)$
+\ifxetex
+  \usepackage[$lang$]{babel}
+\else
+  \usepackage[$lang$]{babel}
+\fi
+$endif$
+
+%\usepackage{titlesec} % Allows customization of titles
+\usepackage{graphicx} % Required for including pictures
+%\begin{titlepage}
+%$if(title)$
+%\title{\color{white}{$title$}}
+%$endif$
+%$if(subtitle)$
+%\subtitle{\color{ocre}{$subtitle$}}
+%$endif$
+%\author{\color{ocre}{$for(author)$$author$$sep$ \and $endfor$}}
+%\date{\color{white}{$date$}}
+
+%$for(header-includes)$
+%$header-includes$
+%$endfor$
+%\end{titlepage}
+
+\usepackage{tikz}
+
+
+\usetikzlibrary{shadows}
+
+\definecolor{kbdFillColor}{HTML}{F8F6EA}
+\definecolor{kbdBorderColor}{HTML}{E0D9B6}
+
+\newcommand*\keystroke[1]{%
+  \tikz[baseline=(key.base)]
+    \node[%
+      draw,
+      fill=kbdFillColor,
+      draw=kbdBorderColor,
+      drop shadow={shadow xshift=0, shadow yshift=-0.5ex,fill=kbdBorderColor,opacity=1.0},
+      rectangle,
+      inner sep=3pt,
+      line width=1pt,
+      font=\scriptsize\sffamily
+    ](key) {#1\strut}
+  ;
+}
+\newcommand\infoImage{\includegraphics[width=17pt]{$template-dir$/information.png}}
+\definecolor{infoColor}{HTML}{DAEAEE}
+ 	
+\newcommand\errorImage{\includegraphics[width=17pt]{$template-dir$/error.png}}
+\definecolor{errorColor}{HTML}{EEDADA}
+
+\newcommand\questionImage{\includegraphics[width=17pt]{$template-dir$/question.png}}
+\definecolor{questionColor}{HTML}{E2DAEE}
+
+\newcommand\warningImage{\includegraphics[width=17pt]{$template-dir$/warning.png}}
+\definecolor{warningColor}{HTML}{EEE7DA}
+
+\newcommand\spoilerImage{\includegraphics[width=17pt]{$template-dir$/spoiler.png}}
+\definecolor{spoilerColor}{HTML}{EEEEEE}
+
+\usepackage[listings]{tcolorbox}
+
+\newenvironment{information}{\noindent\begin{tcolorbox}[colback=infoColor,boxrule=0pt,arc=0pt,colframe=infoColor!50!black]\begin{minipage}{.1\textwidth}\infoImage\end{minipage}\begin{minipage}{.85\textwidth}}{\end{minipage}\hfill\end{tcolorbox}}
+
+\newenvironment{question}{\noindent\begin{tcolorbox}[colback=questionColor,boxrule=0pt,arc=0pt,colframe=questionColor!50!black]\begin{minipage}{.1\textwidth}\questionImage\end{minipage}\begin{minipage}{.85\textwidth}}{\end{minipage}\hfill\end{tcolorbox}}
+
+\newenvironment{attention}{\noindent\begin{tcolorbox}[colback=warningColor,boxrule=0pt,arc=0pt,colframe=warningColor!50!black]\begin{minipage}{.1\textwidth}\warningImage\end{minipage}\begin{minipage}{.85\textwidth}}{\end{minipage}\hfill\end{tcolorbox}}
+
+\newenvironment{erreur}{\noindent\begin{tcolorbox}[colback=errorColor,boxrule=0pt,arc=0pt,colframe=errorColor!50!black]\begin{minipage}{.1\textwidth}\errorImage\end{minipage}\begin{minipage}{.85\textwidth}}{\end{minipage}\hfill\end{tcolorbox}}
+
+
+\newenvironment{secret}{\noindent\begin{tcolorbox}[colback=spoilerColor,boxrule=0pt,arc=0pt,colframe=spoilerColor!50!black]\begin{minipage}{.1\textwidth}\spoilerImage\end{minipage}\begin{minipage}{.85\textwidth}}{\end{minipage}\hfill\end{tcolorbox}}
+
+
+\usepackage{framed}
+
+
+\newcommand*\quotesize{60} % if quote size changes, need a way to make shifts relative
+% Make commands for the quotes
+\newcommand*{\openquote}
+   {\tikz[remember picture,overlay,xshift=-4ex,yshift=0ex]%yshift=-2.5ex
+   \node (OQ) {\fontsize{\quotesize}{\quotesize}\selectfont«};\kern0pt}
+
+\newcommand*{\closequote}[1]
+  {\tikz[remember picture,overlay,xshift=4ex,yshift=0ex]%{#1}
+   \node (CQ) {\fontsize{\quotesize}{\quotesize}\selectfont»};}
+
+% select a colour for the shading
+%\colorlet{shadecolor}{Azure}
+%\definecolor{shadecolor}{HTML}{F0FFFF}
+
+\newcommand*\shadedauthorformat{\emph} % define format for the author argument
+
+% Now a command to allow left, right and centre alignment of the author
+\newcommand*\authoralign[1]{%
+  \if#1l
+    \def\authorfill{}\def\quotefill{\hfill}
+  \else
+    \if#1r
+      \def\authorfill{\hfill}\def\quotefill{}
+    \else
+      \if#1c
+        \gdef\authorfill{\hfill}\def\quotefill{\hfill}
+      \else\typeout{Invalid option}
+      \fi
+    \fi
+  \fi}
+% wrap everything in its own environment which takes one argument (author) and one optional argument
+% specifying the alignment 
+%
+
+\let\quoteOld\quote
+\let\endquoteOld\endquote
+
+\newenvironment{shadequote}[1]%
+{\authoralign{r}
+\ifblank{#1}
+   {\def\shadequoteauthor{}\def\yshift{-2ex}\def\quotefill{\hfill}}
+   {\def\shadequoteauthor{\par\authorfill --- \shadedauthorformat{#1}}\def\yshift{2ex}}%\yshift{2ex}
+%\begin{snugshade}
+\quoteOld\openquote}
+{\shadequoteauthor\quotefill\closequote{\yshift}\endquoteOld}%\end{snugshade}}
+
+
+\renewenvironment{quote}{\begin{shadequote}{}}{\end{shadequote}}
+
+\newenvironment{code_with_legend}[1]{\begin{figure}[htbp]\centering \def\codecaption{\caption{#1}}}{\codecaption\end{figure}}
+
+
+\newenvironment{video}{}{}
+
+
+
+
+\usepackage{caption}
+\newcommand{\eqCaption}[1]{\captionof{figure}{#1}}
+
+
+$if(tables)$
+
+%\definecolor{tableheadercolor}{HTML}{CCCCCC}
+%\definecolor{tablecolorA}{HTML}{DDDDDD}
+%\definecolor{tablecolorB}{HTML}{FFFFFF}
+
+%\let\oldlongtable\longtable
+%\let\endoldlongtable\endlongtable
+
+%\renewenvironment{longtable}{\setlength\LTleft{0pt}\setlength\LTright{0pt}\rowcolors{2}{tablecolorA}{tablecolorB}\oldlongtable} {
+%\endoldlongtable}
+
+%\let\oldtoprule\toprule
+%\let\oldendhead\endhead
+
+
+\usepackage{longtable}
+\usepackage{tabu}
+
+%\newenvironment{testlongtable}{\begin{longtabu} to 0.75\textwidth}{\end{longtabu}}
+%\renewcommand\tabularnewline{\\}
+\newcommand\toprule{\hline}
+\newcommand\midrule{\hline}
+\newcommand\bottomrule{\hline}
+%\renewcommand\toprule{\oldtoprule\rowcolor{tableheadercolor}}
+%\renewcommand\endhead{\oldendhead}
+$endif$
+
+%[width=20pt]
+\newcommand{\vcenteredinclude}[1]{\begingroup
+\setbox0=\hbox{\fbox{\Oldincludegraphics[width=50pt]{#1}}}%
+\parbox{\wd0}{\box0}\endgroup}
+
+\definecolor{sectionfontcolor}{HTML}{EA9408}
+\definecolor{titlecolor}{HTML}{084561}
+\definecolor{subtitlecolor}{HTML}{999999}
+
+$if(title)$
+\title{\vcenteredinclude{$icon_path$}\ \color{titlecolor} $title$}
+$endif$
+$if(subtitle)$
+\subtitle{\color{subtitlecolor}$subtitle$\\\textcolor{sectionfontcolor}{\rule{0.8\textwidth}{2pt}}}
+$endif$
+$if(author)$
+\author{$for(author)$$author$$sep$ -- $endfor$}
+$endif$
+$if(title)$
+\date{\color{subtitlecolor}$date$}
+$endif$
+
+\definecolor{colorkeywords}{HTML}{008000}
+\definecolor{colorcomments}{HTML}{408080}
+\definecolor{colorstrings}{HTML}{BA2121}
+\definecolor{colortxt}{HTML}{424242}
+\definecolor{mygray}{HTML}{BEBEC5}
+\definecolor{lightGray}{HTML}{F8F8F8}
+\definecolor{bordercodecolor}{HTML}{DDDDDD}
+
+
+\lstnewenvironment{codelisting}[1][]%
+  {\noindent\minipage{\linewidth}\medskip 
+   \lstset{
+  showspaces=false,
+  showtabs=false,
+  breaklines=true,
+  showstringspaces=false,
+  breakatwhitespace=true,
+  stepnumber=1,
+  columns=fullflexible,
+  frame=single, 
+  backgroundcolor=\color{lightGray},
+  commentstyle=\color{colorcomments}\itshape,
+  keywordstyle=\color{colorkeywords},
+  stringstyle=\color{colorstrings},
+  numbers=left,
+  numberstyle=\small\color{mygray}, % the style that is used for the line-numbers
+  rulecolor=\color{bordercodecolor}, 
+  basicstyle=\NoAutoSpacing\ttfamily\color{colortxt},#1
+}}
+  {\endminipage}
+%\def\codeinline{\lstinline[basicstyle=\ttfamily\color{textCodeColor}]}
+\newcommand\codeinline{\lstinline[basicstyle=\NoAutoSpacing\ttfamily\color{textCodeColor},columns=fullflexible,breaklines=true]}
+
+
+
+\usepackage{titlesec}
+
+\titleformat{\section}
+{\color{sectionfontcolor}\normalfont\huge\bfseries}
+{\color{sectionfontcolor}\thesection}{1em}{}
+
+
+\titleformat{\subsection}
+{\color{sectionfontcolor}\normalfont\LARGE\bfseries\em}
+{\color{sectionfontcolor}\thesubsection}{1em}{}
+
+
+%\usepackage{titling}
+
+%$if(icon_path)$
+%\pretitle{%
+%\begin{minipage}{.1\textwidth}\end{minipage}\begin{minipage}{.85\textwidth}\begin{center}\LARGE
+%}
+%\posttitle{\end{center}\end{minipage}}
+%$endif$
+
+\begin{document}
+$if(title)$
+  \maketitle
+$endif$
+
+$if(abstract)$
+\begin{abstract}
+$abstract$
+\end{abstract}
+$endif$
+
+$for(include-before)$
+$include-before$
+
+$endfor$
+
+
+$if(toc)$
+{
+\hypersetup{linkcolor=ocre}
+\setcounter{tocdepth}{$toc-depth$}
+\tableofcontents
+%\newpage
+}
+$endif$
+
+\begin{information}
+Cet document a été généré automatiquement à partir d'un article publié sur le site \textbf{Zeste de Savoir} $if(url_source)$à l'adresse \url{$url_source$}$endif$.
+
+
+$if(licence)$Cet article est publié sous licence s\textbf{$licence$}.$endif$
+\end{information}
+
+
+
+$body$
+
+$if(abbrevs)$
+\section*{Abbréviations}
+
+$abbrevs$
+
+$endif$
+
+%\section*{Liens}
+%\theendnotes
+\printendnotes
+
+%\newpage\begi
+$if(natbib)$
+$if(biblio-files)$
+$if(biblio-title)$
+$if(book-class)$
+\renewcommand\bibname{$biblio-title$}
+$else$
+\renewcommand\refname{$biblio-title$}
+$endif$
+$endif$
+\bibliography{$biblio-files$}
+
+$endif$
+$endif$
+
+$if(biblatex)$
+\printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
+
+$endif$
+$for(include-after)$
+$include-after$
+
+$endfor$
+
+
+
+
+\end{document}
